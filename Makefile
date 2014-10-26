@@ -1,5 +1,5 @@
-fork1:
-	gcc -Wall fork1.c -o fork
-	chmod +x fork
+ex3:
+	gcc -Wall ex3x1.c -o ex3
+	chmod +x ex3
 remove:
-	rm fork
+	rm ex3
