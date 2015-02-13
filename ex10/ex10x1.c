@@ -1,73 +1,56 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <signal.h>
-#include <string.h>
+#include <fcntl.h>
 
-void sig_handler(int sig_code);
+//Write a concurrent program able to sort data files using threads as follows.
+//The input files include:
+//• on the first line the total number of integer values;
+//• on the following lines a number for each line; 
 
-int main(int argc, char *argv[])
-{
-  pid_t teacher_pid;
-  pid_t assistant_pid;
-  int teass_pipe[2];
-  FILE * fileIn;
-  FILE * fileOut;
-  char id[20], surname[20], name[20];
-  int mark, mark_other;
+int main(){
 
-  if(argc != 2){
-    exit(1);
+  int fin;
+  int fout;
+  int i;
+
+  for( i = 0; i < argc ; i += 2 ){
+    fin = open(argv[i],O_TEXT);
+    fout = open(argv[i+1],O_WRONLY);
+    pthread_create(dostuff,fin,fout);
+    //spawn thread with fin,fout
   }
-  teacher_file = fopen(argv[0],"r");
-  assistant_file = fopen(argv[1],"r");
-
-  //signal(SIGCONT,sig_handler);
-  if(!pipe(teass_pipe)){
-    exit(1);
-  }
-
-  teacher_pid = fork();
-  if(0 != teacher_pid){
-
-    fileIn = fopen(argv[1],"r");
-    fileOut = fopen(argv[2],"w");
-
-    while(EOF != fscanf(fileIn,"%s %s %s %d",id, surname, name, &mark)){
-      fprintf(stdout,"got %s %s %s %d\n",id,surname,name,mark);
-      write(teass_pipe[1],id,sizeof(id));
-      write(teass_pipe[1],surname,strlen(surname));
-      write(teass_pipe[1],name,strlen(name));
-      read(teass_pipe[0],&mark_other,sizeof(mark_other));
-      mark += mark_other;
-      fprintf(fileOut,"%s %s %s %d",id, surname, name, mark);
-    }
-    close(teass_pipe[0]);
-  } else {
-    assistant_pid = fork();
-    if(0 == assistant_pid){
-      while(read(teass_pipe[1],&mark_other,0)){
-        if(errno == EPIPE){
-          break;
-        }
-        read(teass_pipe[0],&mark_other,0)
-          read(teass_pipe[0],id,sizeof(id));
-        read(teass_pipe[0],surname,strlen(surname));
-        read(teass_pipe[0],name,strlen(name));
-        fprintf(stdout,"grade for %s %s %s %d\n");
-        fscanf(stdin,"%d",&mark);
-        write(teass_pipe[1],&mark,sizeof(mark));
-        //wait for data
-        //read stdin for mark
-        //send mark back
-      }
-
-    }
-  }
-  exit(0);
 }
+void *dostuff(int fin,int fout){
+  char buff[100];
+  buff[0] = '\0';
+  int size = 0;
+  do{
+    read(fin,buff,1);
+    size *= 10;
+    size += atoi(buff);
+  }while(buff != '\n')
+  vals = malloc(sizeof(int)*size);
+  while(read(fin,buff,sizeof(buff))){
+    if(buff != '\n'){
+      val *= 10;
+      val += atoi(buff);
+    } else {
 
-/*void sig_handler(int sig_code){
-//
-return;
-}*/
+    }
+  }
+
+  write(fout,buff,sizeof(buff));
+  close(fin);
+  close(fout);
+}
+  /*
+    • reads the corresponding input file
+    • sort the corresponding integer vector in ascending order
+    • store the result in the corresponding output file
+
+    For example:
+    ./thread_sort.exe file1.in file1.out file2.in file2.out file3.in file3.out
+    It will create 3 threads :
+    • Thread 1 will sort file1.in and it will store the result in file1.out
+    • Thread 2 will sort file2.in and it will store the result in file2.out
+    • Thread 3 will sort file3.in and it will store the result in file3.out
+  */
+}

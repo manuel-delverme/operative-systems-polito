@@ -6,7 +6,7 @@ fib(){
     tmp=$first
     first=$(($first+$second))
     second=$tmp
-    echo $first
+    echo -n $first
   done
 }
 
