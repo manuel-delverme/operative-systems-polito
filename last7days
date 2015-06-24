@@ -1,0 +1,30 @@
+Theory
+  Caratteristiche delle pipe per la comunicazione && sync tra processi
+  esempio descritto in C
+
+  implement semaphore w/counting (with init), signal, wait
+
+  signal, kill, race condition, signal(SIGCHILD, SIG_IGN), signal(SIGCHILD, SIG_IGN) relation w/ wait()
+
+
+  Grafi di allocazione delle risorse (semplici e multiple)
+  w/deadlock w/o deadlock (2 esempi)
+
+  hardware solutions to sync problem (?) using testAndSet
+
+
+Loop unroll
+  fork && system
+
+
+Grafo di precedenza,
+  realizzarlo (while(1) init wait)
+  Riportare il corpo dei processi (P1, . . . , P6) e l’inizializzazione dei semafori.
+
+Bash w/o awk
+
+  skript.sh ARGV
+    -> find grep sed cp if eq etc
+    -> cut
+
+AWK
