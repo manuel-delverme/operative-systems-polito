@@ -1,0 +1,8 @@
+./fork3.c 
+./fork1.c 
+./fork 
+./fork2.c 
+./fork3.c 
+./fork1.c 
+./fork 
+./fork2.c 

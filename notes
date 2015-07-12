@@ -1,0 +1,119 @@
+
+DMA (direct memory access)
+
+Device controller writes directly in memory to allow faster communication
+interrupt generated for each block not for each byte 
+
+
+Dual mode
+    Kernel mode vs User mode
+
+    user --(interrupt/trap/fault)-> kernel
+    kernel --(set user mode)-> user
+
+Memory protection
+    Fecence regiter (holds the smallest addr userland)
+    only kernel can access to addr < addr(fence register)
+    memory addresses allocated MIN=(base register) MAX= (limit register)
+
+os layers:
+    5: user programs
+    4: buffering for I/O (uio)
+    3: operator-console device driveer
+    2: memory managment
+    1: CPU sceduling
+    0: hardware
+
+Process Control Block (PCB)
+    Process state
+    Program counter
+    CPU registers
+    CPU scheduling metadata
+    Memory-managment metadata
+    I/O status metadata
+    Accounting metadata
+
+Thread
+    Private:
+        Program counter
+        Registers
+        Stack (local variables)
+        Heap (global variables) ?!?!
+
+    Shared with peer threads:
+        code section
+        data section
+        operating-system resources (task domain/section)
+
+
+    One to one:
+        Userland thread -> Kernel thread
+    Many to one:
+        Userland proecess -> Kernel thread
+    Many to many:
+        Userland threads -> Kernel threads
+        !kernel create fewer threads than user
+
+    Userland thread:
+        Content switching is faster
+        Kernel indipendence
+        Everythig is blocked on blocking call
+        no parallel processing
+    Kernelland thread:
+        More expensive
+        allows multithreading
+        only thread is blocked on blocking call
+
+pthread_create(t1,null,some_functions,args);
+pthread_equas(t1,t2);
+
+File System:
+    blocks 2^n bytes
+    link:
+        ln
+            no cross FS
+            no directories
+        ln -s (soft)
+            contains path to other file
+    inode:
+        files && dirs have an inode
+        inode num from 1
+        fd {0..OPEN_MAX}
+        //0 stdin 1 stdout 2 stderr
+
+
+
+
+            
+    
+
+
+Deadlock prevention:
+    Hold & Wait:
+        Request All First
+        Release Before Request
+    No Preemption:
+        if try_lock fails
+            release everything
+        build a list of what the process needs
+        restart the process when everything is free
+    Hierarchical Resource Usage (HRU)
+        resources must be requested in order of resource_id
+        if process needs something < than last resource_id
+            it has to release anything is < than the last id
+
+Banker's algorithm
+    - Pi declares nmax Rs
+    - Pi can be blocked when requesting Ri
+    - Pi has to release Ri in time < inf
+
+DUNNO
+
+
+
+
+
+
+SIGCHILD
+    kernel sends SIGCHILD to the parent when
+    a child exits with exception
